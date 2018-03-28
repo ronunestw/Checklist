@@ -28,7 +28,7 @@ class TableViewController: UITableViewController {
         if let cell = tableView.cellForRow(at: indexPath) {
             let cellContent = content[indexPath.row]
             cellContent.toggleChecked()
-            configureCheckmark(for: cell, with: cellContent)
+            configureCheckmark(for: cell as! ChecklistCellItem, with: cellContent)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -43,7 +43,7 @@ class TableViewController: UITableViewController {
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "ChecklistItem",
-            for: indexPath)
+            for: indexPath) as! ChecklistCellItem
 
         let cellContent = content[indexPath.row]
         
@@ -53,13 +53,12 @@ class TableViewController: UITableViewController {
         return cell
     }
 
-    func configureText(for cell: UITableViewCell,
+    func configureText(for cell: ChecklistCellItem,
                        with item: ChecklistItem) {
-        let label = cell.viewWithTag(1000) as! UILabel
-        label.text = item.description
+        cell.configure(item.description)
     }
     
-    func configureCheckmark(for cell: UITableViewCell,
+    func configureCheckmark(for cell: ChecklistCellItem,
                             with item: ChecklistItem) {
         if item.checked {
             cell.accessoryType = .checkmark
