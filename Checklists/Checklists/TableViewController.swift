@@ -26,14 +26,10 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
-            var cellContent = content[indexPath.row]
+            let cellContent = content[indexPath.row]
             cellContent.checked = !cellContent.checked
             
-            if cellContent.checked == true {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
+            configureCheckmark(for: cell, with: cellContent)
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -56,17 +52,22 @@ class TableViewController: UITableViewController {
             for: indexPath)
 
         let label = cell.viewWithTag(100) as! UILabel
-        label.text = content[indexPath.row].description
+        let cellContent = content[indexPath.row]
+        label.text = cellContent.description
         
-        if content[indexPath.row].checked == true {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }
+        configureCheckmark(for: cell, with: cellContent)
         
         // End of new code block
         return cell
     }
 
+    func configureCheckmark(for cell: UITableViewCell,
+                            with item: ChecklistItem) {
+        if item.checked {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+    }
 }
 
