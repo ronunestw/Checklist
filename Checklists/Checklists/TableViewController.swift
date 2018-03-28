@@ -27,8 +27,7 @@ class TableViewController: UITableViewController {
                             didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             let cellContent = content[indexPath.row]
-            cellContent.checked = !cellContent.checked
-            
+            cellContent.toggleChecked()
             configureCheckmark(for: cell, with: cellContent)
         }
         
@@ -42,25 +41,24 @@ class TableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //TODO Duvidas - Identificadores com string apenas?
-        //Encontrar views com Tag é normal?
-        
-        //TODO Esse padrao de nomear metodos é normal?
-        
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "ChecklistItem",
             for: indexPath)
 
-        let label = cell.viewWithTag(100) as! UILabel
         let cellContent = content[indexPath.row]
-        label.text = cellContent.description
         
+        configureText(for: cell, with: cellContent)
         configureCheckmark(for: cell, with: cellContent)
         
-        // End of new code block
         return cell
     }
 
+    func configureText(for cell: UITableViewCell,
+                       with item: ChecklistItem) {
+        let label = cell.viewWithTag(1000) as! UILabel
+        label.text = item.description
+    }
+    
     func configureCheckmark(for cell: UITableViewCell,
                             with item: ChecklistItem) {
         if item.checked {

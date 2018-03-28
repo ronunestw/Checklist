@@ -10,10 +10,14 @@ import Foundation
 
 class ChecklistItem {
     var description = ""
-    var checked = false
+    private(set) var checked = false
     
     init(isChecked: Bool, description: String) {
         self.checked = isChecked
         self.description = description
+    }
+    
+    func toggleChecked() {
+        checked = !checked
     }
 }
