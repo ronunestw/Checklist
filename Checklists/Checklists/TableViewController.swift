@@ -10,11 +10,11 @@ import UIKit
 
 class TableViewController: UITableViewController {
 
-    var content : [(isChecked : Bool, description : String)] = []
+    var content = [ChecklistItem]()
     
     func initTupleArrayContent() {
         for index in 1...50 {
-            content.append((isChecked: false, description: "My checklist descriotion number: \(index)"))
+            content.append(ChecklistItem(isChecked: false, description: "My checklist descriotion number: \(index)"))
         }
     }
     
@@ -27,15 +27,13 @@ class TableViewController: UITableViewController {
                             didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             var cellContent = content[indexPath.row]
-            cellContent.isChecked = !cellContent.isChecked
+            cellContent.checked = !cellContent.checked
             
-            if cellContent.isChecked == true {
+            if cellContent.checked == true {
                 cell.accessoryType = .checkmark
             } else {
                 cell.accessoryType = .none
             }
-            
-            content[indexPath.row] = cellContent
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -60,7 +58,7 @@ class TableViewController: UITableViewController {
         let label = cell.viewWithTag(100) as! UILabel
         label.text = content[indexPath.row].description
         
-        if content[indexPath.row].isChecked {
+        if content[indexPath.row].checked == true {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
@@ -68,7 +66,6 @@ class TableViewController: UITableViewController {
         
         // End of new code block
         return cell
-
     }
 
 }
