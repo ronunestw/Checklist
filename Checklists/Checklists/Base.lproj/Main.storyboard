@@ -47,7 +47,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="customText" destination="shW-Lg-QEs" id="iaC-Hd-NcY"/>
-                                    <segue destination="5fw-ns-4Vk" kind="show" identifier="detailSegue" id="nnj-hq-mOb"/>
+                                    <segue destination="u6G-4I-Uzn" kind="show" identifier="editItemSegue" id="S84-ox-o1w"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -168,4 +168,7 @@
             <point key="canvasLocation" x="7" y="-161"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="S84-ox-o1w"/>
+    </inferredMetricsTieBreakers>
 </document>

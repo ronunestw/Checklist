@@ -13,7 +13,7 @@ class TableViewController: UITableViewController, AddItemDelegate {
     var content = [ChecklistItem]()
     
     func initTupleArrayContent() {
-        for index in 1...10 {
+        for index in 1...50 {
             content.append(ChecklistItem(isChecked: false, description: "My checklist descriotion number: \(index)"))
         }
     }
@@ -29,6 +29,17 @@ class TableViewController: UITableViewController, AddItemDelegate {
 //        tableView.insertRows(at: indexPaths, with: .automatic)
     }
     
+    func sendEditedCheckListItem(_ newItem : ChecklistItem) {
+        if let index = content.index(of: newItem) {
+            let indexPath = IndexPath(row: index, section: 0)
+            if let cell = tableView.cellForRow(at: indexPath) {
+//                configureText(for: cell, with: item)
+                tableView.reloadData()
+            }
+        }
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initTupleArrayContent()
@@ -36,11 +47,11 @@ class TableViewController: UITableViewController, AddItemDelegate {
 
     override func tableView(_ tableView: UITableView,
                             didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            let cellContent = content[indexPath.row]
-            cellContent.toggleChecked()
-            configureCheckmark(for: cell as! ChecklistCellItem, with: cellContent)
-        }
+//        if let cell = tableView.cellForRow(at: indexPath) {
+//            let cellContent = content[indexPath.row]
+//            cellContent.toggleChecked()
+//            configureCheckmark(for: cell as! ChecklistCellItem, with: cellContent)
+//        }
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -77,7 +88,7 @@ class TableViewController: UITableViewController, AddItemDelegate {
 
     func configureText(for cell: ChecklistCellItem,
                        with item: ChecklistItem) {
-        cell.configure(item.description)
+        cell.configure(item.itemDescription)
     }
     
     func configureCheckmark(for cell: ChecklistCellItem,
@@ -92,6 +103,10 @@ class TableViewController: UITableViewController, AddItemDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let addItemVc = segue.destination as? AddItemViewController {
             addItemVc.delegate = self
+            if  segue.identifier == "editItemSegue",
+                let rowIndex = tableView.indexPathForSelectedRow?.row {
+                addItemVc.checklistItem = content[rowIndex]
+            }
         }
     }
 }

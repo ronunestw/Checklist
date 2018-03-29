@@ -10,6 +10,7 @@ import UIKit
 
 protocol AddItemDelegate : class {
     func sendNewCheckListItem(_ newItem : ChecklistItem)
+    func sendEditedCheckListItem(_ newItem : ChecklistItem)
 }
 
 class AddItemViewController: UITableViewController {
@@ -17,14 +18,27 @@ class AddItemViewController: UITableViewController {
     @IBOutlet weak var textField: UITextField!
     
     var delegate : AddItemDelegate?
+    var checklistItem : ChecklistItem? {
+        didSet {
+            isEditingChecklistItem = .EDIT
+        }
+    }
+    var isEditingChecklistItem : ActionStatus = .ADD
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .never
+        
+        textField.text = checklistItem?.itemDescription
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        delegate?.sendNewCheckListItem(ChecklistItem(isChecked: false, description: textField.text!))
+        if isEditingChecklistItem == .EDIT {
+            checklistItem?.itemDescription = textField.text ?? ""
+            delegate?.sendEditedCheckListItem(checklistItem!)
+        } else if isEditingChecklistItem == .ADD {
+            delegate?.sendNewCheckListItem(ChecklistItem(isChecked: false, description: textField.text!))
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,6 +46,7 @@ class AddItemViewController: UITableViewController {
     }
     
     @IBAction func cancel() {
+        isEditingChecklistItem = .CANCEL
         navigationController?.popViewController(animated: true)
     }
     
@@ -42,6 +57,7 @@ class AddItemViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         return nil
     }
+    
 }
 
 extension AddItemViewController : UITextFieldDelegate {
@@ -58,4 +74,10 @@ extension AddItemViewController : UITextFieldDelegate {
         }
         return true
     }
+}
+
+enum ActionStatus {
+    case ADD
+    case EDIT
+    case CANCEL
 }

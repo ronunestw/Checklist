@@ -8,16 +8,22 @@
 
 import Foundation
 
-class ChecklistItem {
-    var description = ""
+class ChecklistItem : CustomStringConvertible, Equatable {
+    var description: String {return "\(itemDescription) - isChecked: \(checked)"}
+    
+    var itemDescription = ""
     private(set) var checked = false
     
     init(isChecked: Bool, description: String) {
         self.checked = isChecked
-        self.description = description
+        self.itemDescription = description
     }
     
     func toggleChecked() {
         checked = !checked
+    }
+    
+    static func == (lhs: ChecklistItem, rhs: ChecklistItem) -> Bool {
+        return lhs.itemDescription == rhs.itemDescription
     }
 }
