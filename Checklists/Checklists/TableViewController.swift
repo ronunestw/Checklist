@@ -8,14 +8,25 @@
 
 import UIKit
 
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, AddItemDelegate {
 
     var content = [ChecklistItem]()
     
     func initTupleArrayContent() {
-        for index in 1...50 {
+        for index in 1...10 {
             content.append(ChecklistItem(isChecked: false, description: "My checklist descriotion number: \(index)"))
         }
+    }
+    
+    func sendNewCheckListItem(_ newItem : ChecklistItem) {
+        content.append(newItem)
+        tableView.reloadData()
+        
+        //TODO Perguntawr para Juliana
+//        let newRowIndex = content.count
+//        let indexPath = IndexPath(row: newRowIndex, section: 0)
+//        let indexPaths = [indexPath]
+//        tableView.insertRows(at: indexPaths, with: .automatic)
     }
     
     override func viewDidLoad() {
@@ -32,6 +43,17 @@ class TableViewController: UITableViewController {
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCellEditingStyle,
+        forRowAt indexPath: IndexPath) {
+        
+        content.remove(at: indexPath.row)
+        
+        let indexPaths = [indexPath]
+        tableView.deleteRows(at: indexPaths, with: .automatic)
     }
     
     override func tableView(_ tableView: UITableView,
@@ -64,6 +86,12 @@ class TableViewController: UITableViewController {
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let addItemVc = segue.destination as? AddItemViewController {
+            addItemVc.delegate = self
         }
     }
 }
